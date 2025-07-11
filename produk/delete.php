@@ -1,7 +1,16 @@
 <?php
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Content-Type: application/json");
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+  http_response_code(200);
+  exit();
+}
+
 include '../db.php';
 
-// Ambil input dari request body (JSON)
 $data = json_decode(file_get_contents("php://input"));
 
 if (isset($data->id)) {
@@ -16,7 +25,7 @@ if (isset($data->id)) {
     echo json_encode(["message" => "Gagal menghapus produk.", "error" => $conn->error]);
   }
 } else {
-  http_response_code(400); // Bad Request
-  echo json_encode(["message" => "ID produk tidak ditemukan."]);
+  http_response_code(400);
+  echo json_encode(["message" => "ID tidak ditemukan."]);
 }
 ?>
